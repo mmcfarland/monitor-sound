@@ -137,11 +137,16 @@ Sound.prototype.setVolume = function(vol) {
 }
 
 Sound.prototype.setAdvisoryLevel = function(level) {
-    // Make the number of tones a factor of the level
-    var numTones = parseInt(level*10);
-    //for (var i = 0; i < numTones; i++) {
+    if (this._chords.length === 0) {
         this.playChord(this.allChords[0]);
-    //}
+    }
 
     // Make volume a factor of level
+    if (level < 0) {
+        this.setVolume(0);
+    } else if (level > 1) {
+        this.setVolume(1);
+    } else {
+        this.setVolume(level);
+    }
 }

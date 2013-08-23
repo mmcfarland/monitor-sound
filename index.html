@@ -1,8 +1,11 @@
 <html>
     <body>
         <script src="sound.js" type="text/javascript"></script>
+        <script src="signal.js" type="text/javascript"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
         <button id="go">Play</button>
         <button id="stop">Stop</button>
+        <input id="data" type="range" min="-1" max="101" value="0" step="1">
         <script>
             var s = new Sound();
             var p = document.getElementById('go');
@@ -16,6 +19,15 @@
                 s.stopChord();
             }
 
+        </script>
+        <script>
+            var s = new Signal();
+            s.setRange(0,100);
+            var d = document.getElementById('data');
+            $(d).change(function() {
+                s.update(this.value);
+                console.log(s.getValue());
+            });
         </script>
     </body>
 

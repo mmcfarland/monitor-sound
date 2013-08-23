@@ -4,7 +4,7 @@ var Sound = function() {
     this._volume.connect(this.ac.destination);
     this.setVolume(0.1);
     this._chords = [];
-    this._numOsc = 0.0;
+    this._numOsc = 1.0;
 
     this.Notes = {
         a: 220.0,
@@ -19,24 +19,27 @@ var Sound = function() {
     this.Chords = {
         a: [this.Notes.a, this.Notes.d, this.Notes.e],
         b: [this.Notes.b, this.Notes.e, this.Notes.f],
-        c: [this.Notes.c, this.Notes.f, this.Notes.g],
+        c: [this.Notes.c, this.Notes.e, this.Notes.g],
         d: [this.Notes.d, this.Notes.g, this.Notes.a],
         e: [this.Notes.e, this.Notes.a, this.Notes.b]
     }
 
-    this.allChords = [this.Chords.a, this.Chords.b, this.Chords.c,
-        this.Chords.d, this.Chords.e];
+    this.allChords = [this.Chords.c];
+    //this.allChords = [this.Chords.a, this.Chords.b, this.Chords.c,
+    //    this.Chords.d, this.Chords.e];
 }
 
 Sound.prototype.addOscillator = function() {
+    var oldNumOsc = this._numOsc;
     this._numOsc = this._numOsc + 1.0;
-    this.setVolume(this._volume.gain.value);
+    this.setVolume(this._volume.gain.value*oldNumOsc);
     return this.ac.createOscillator();
 }
 
 Sound.prototype.removeOscillator = function() {
+    var oldNumOsc = this._numOsc;
     this._numOsc = this._numOsc - 1.0;
-    this.setVolume(this._volume.gain.value);
+    this.setVolume(this._volume.gain.value*oldNumOsc);
 }
 
 Sound.prototype.play = function(freq) {
@@ -127,6 +130,7 @@ Sound.prototype.stopBackground = function() {
 
 Sound.prototype.setVolume = function(vol) {
     this._volume.gain.value = vol/this._numOsc;
+    console.log(this._volume.gain.value);
 }
 
 Sound.prototype.setAdvisoryLevel = function(level) {

@@ -100,7 +100,10 @@ Sound.prototype.playFile = function(url) {
     var play = function(b) {
         self._bgSource = self.ac.createBufferSource()
         self._bgSource.buffer = b;
-        self._bgSource.connect(self.ac.destination);
+        var volume = self.ac.createGain();
+        volume.connect(self.ac.destination);
+        volume.gain.value = 0.10;
+        self._bgSource.connect(volume);
         self._bgSource.noteOn(0); 
     };
 

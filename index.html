@@ -15,11 +15,11 @@
 
             p.onclick = function() {
                 //s.play(261.63);
-                sn.playChord([261.63, 400.23, 154]);
+                sn.playChord([sn.Notes.a, sn.Notes.c, sn.Notes.e]);
             }
 
-            e.onclick = function() {s.stopChord();}
-            sb.onclick = function() { s.stopBackground(); }
+            e.onclick = function() {sn.stopChord();}
+            sb.onclick = function() { sn.stopBackground(); }
             sn.playFile("wn.wav");
 
         </script>

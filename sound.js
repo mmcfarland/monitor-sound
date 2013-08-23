@@ -4,7 +4,7 @@ var Sound = function() {
     this._volume.connect(this.ac.destination);
     this.setVolume(0.1);
     this._chords = [];
-    this._numOsc = 1.0;
+    this._numOsc = 0.0;
 
     this.Notes = {
         a: 220.0,

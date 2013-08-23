@@ -3,6 +3,7 @@ var Sound = function() {
     this._volume = this.ac.createGain();
     this._volume.connect(this.ac.destination);
     this.setVolume(0.1);
+    this._chords = [];
 
     this.Notes = {
         a: 220.0,
@@ -12,6 +13,12 @@ var Sound = function() {
         e: 329.63,
         f: 349.23
     };
+
+    this.Chords = {
+        a: [this.Notes.a, this.Notes.d, this.Notes.e],
+        b: [this.Notes.b, this.Notes.e, this.Notes.f],
+        c: [this.Notes.c, this.Notes.f, this.Notes.g]
+    }
 }
 
 Sound.prototype.play = function(freq) {
@@ -23,27 +30,41 @@ Sound.prototype.play = function(freq) {
 
 Sound.prototype.playChord = function(freqs) {
     var self = this;
-    this.curChord = [];
+    var curChord = [];
     freqs.forEach(function(f) {
         var o = self.ac.createOscillator();
         o.frequency.value = f;
         o.connect(self._volume);
-        self.curChord.push(o);
+        curChord.push(o);
     });
 
-    this.curChord.forEach(function(o) {
+    curChord.forEach(function(o) {
         o.noteOn(0);
     });
+
+    return self._chords.push(curChord);
 }
 
 Sound.prototype.stop = function() {
     this.osc.noteOff(0);
 }
 
-Sound.prototype.stopChord = function() {
-    this.curChord.forEach(function(o) {
-        o.noteOff(0);
-    });
+Sound.prototype.stopChord = function(i) {
+    function off(c) {
+        c.forEach(function(o) {
+            o.noteOff(0);
+        });
+    }
+
+    // If no index, turn off all chords, otherwise
+    // turn of specific chord by index
+    if (i == undefined) {
+        this._chords.forEach(function(chord) {
+            off(chord);
+        });
+    } else {
+        off(this._chords[i]);
+    }
 }
 
 Sound.prototype.playFile = function(url) {
@@ -86,5 +107,14 @@ Sound.prototype.stopBackground = function() {
 
 Sound.prototype.setVolume = function(vol) {
     this._volume.gain.value = vol;
-    console.log(vol);
+}
+
+Sound.prototype.setAdvisoryLevel = function(level) {
+    // Make the number of tones a factor of the level
+    var numTones = parseInt(level*10);
+    this.playChord(this.Chords.a);
+    //this.playChord(this.Chords.b);
+    this.playChord(this.Chords.c);
+  
+    
 }

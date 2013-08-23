@@ -54,10 +54,10 @@ Sound.prototype.playFile = function(url) {
     request.responseType = "arraybuffer";
 
     var play = function(b) {
-        source = self.ac.createBufferSource()
-        source.buffer = b;
-        source.connect(self.ac.destination);
-        source.noteOn(0); 
+        self._bgSource = self.ac.createBufferSource()
+        self._bgSource.buffer = b;
+        self._bgSource.connect(self.ac.destination);
+        self._bgSource.noteOn(0); 
     };
 
     var source = self.ac.createBufferSource();
@@ -78,7 +78,10 @@ Sound.prototype.playFile = function(url) {
 }
 
 Sound.prototype.stopBackground = function() {
+    var self = this;
     clearInterval(self.bgTimer);
+    self.bgTimer = 0;
+    this._bgSource.noteOff(0);
 }
 
 Sound.prototype.setVolume = function(vol) {

@@ -4,6 +4,7 @@ var Sound = function() {
     this._volume.connect(this.ac.destination);
     this.setVolume(0.1);
     this._chords = [];
+    this._numOsc = 0.0;
 
     this.Notes = {
         a: 220.0,
@@ -27,8 +28,19 @@ var Sound = function() {
         this.Chords.d, this.Chords.e];
 }
 
+Sound.prototype.addOscillator = function() {
+    this._numOsc = this._numOsc + 1.0;
+    this.setVolume(this._volume.gain.value);
+    return this.ac.createOscillator();
+}
+
+Sound.prototype.removeOscillator = function() {
+    this._numOsc = this._numOsc - 1.0;
+    this.setVolume(this._volume.gain.value);
+}
+
 Sound.prototype.play = function(freq) {
-    this.osc = this.ac.createOscillator();
+    this.osc = this.addOscillator();
     this.osc.frequency.value = freq;
     this.osc.connect(this.ac.destination);
     this.osc.noteOn(0);
@@ -38,7 +50,7 @@ Sound.prototype.playChord = function(freqs) {
     var self = this;
     var curChord = [];
     freqs.forEach(function(f) {
-        var o = self.ac.createOscillator();
+        var o = self.addOscillator();
         o.frequency.value = f;
         o.connect(self._volume);
         curChord.push(o);
@@ -56,8 +68,10 @@ Sound.prototype.stop = function() {
 }
 
 Sound.prototype.stopChord = function(i) {
+    var self = this;
     function off(c) {
         c.forEach(function(o) {
+            self.removeOscillator();
             o.noteOff(0);
         });
     }
@@ -112,7 +126,7 @@ Sound.prototype.stopBackground = function() {
 }
 
 Sound.prototype.setVolume = function(vol) {
-    this._volume.gain.value = vol;
+    this._volume.gain.value = vol/this._numOsc;
 }
 
 Sound.prototype.setAdvisoryLevel = function(level) {

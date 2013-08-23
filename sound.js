@@ -1,5 +1,13 @@
 var Sound = function() {
     this.ac = new webkitAudioContext();    
+    this.Notes = {
+        a: 220.0,
+        b: 246.94,
+        c: 261.63,
+        d: 293.66,
+        e: 329.63,
+        f: 349.23
+    };
 }
 
 Sound.prototype.play = function(freq) {

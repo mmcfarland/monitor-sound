@@ -2,11 +2,11 @@
     <body>
         <script src="sound.js" type="text/javascript"></script>
         <script src="signal.js" type="text/javascript"></script>
+        <script src="feed.js" type="text/javascript"></script>
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
         <button id="go">Play</button>
         <button id="stop">Stop</button>
         <input id="data" type="range" min="-1" max="101" value="0" step="1">
-        <input id="vol" type="range" min="0" max="1" value="0" step="0.05">
         <button id="stopbg">Stop Background</button>
         <script>
             var sn = new Sound(),
@@ -20,21 +20,18 @@
                 sn.setAdvisoryLevel(.444);
             }
 
-            var v = document.getElementById('vol');
-            $(v).change(function() {
-                sn.setVolume(this.value);
-            });
 
             e.onclick = function() {sn.stopChord();}
             sb.onclick = function() { sn.stopBackground(); }
             sn.playFile("wn.wav");
 
+            var data = new DataLoader('Philadelphia,PA');
         </script>
         <script>
             var s = new Signal();                                               
             s.setRange(0,100);                                                  
             var d = document.getElementById('data');                            
-            s.register(function(value){ console.log(value); });                 
+            s.register($.proxy(sn.setAdvisoryLevel,sn));                 
             $(d).change(function() {                                            
                 s.update(this.value);                                           
             }); 

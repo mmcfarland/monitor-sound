@@ -4,6 +4,7 @@ var Signal = function(name) {
     this.minimum = null;
     this.value = null;
     this.setTransform(Signal.prototype.linearTransform);
+    this.listeners = [];
 }
 
 Signal.prototype.setRange = function(min,max) {
@@ -30,10 +31,18 @@ Signal.prototype.setTransform = function(transformFxn) {
 }
 
 Signal.prototype.update = function(newValue) {
+    // Set new value, notify listeners
+    var self = this;
     this.value = newValue;
-    return this.transform(this.value);
+    this.listeners.forEach(function(f) {
+        f.call(self,self.getValue());
+    });
 }
 
 Signal.prototype.getValue = function() {
     return this.transform(this.value);
+}
+
+Signal.prototype.register = function(fxn) {
+    this.listeners.push(fxn);
 }

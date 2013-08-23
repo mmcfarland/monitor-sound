@@ -24,13 +24,13 @@
 
         </script>
         <script>
-            var s = new Signal();
-            s.setRange(0,100);
-            var d = document.getElementById('data');
-            $(d).change(function() {
-                s.update(this.value);
-                console.log(s.getValue());
-            });
+            var s = new Signal();                                               
+            s.setRange(0,100);                                                  
+            var d = document.getElementById('data');                            
+            s.register(function(value){ console.log(value); });                 
+            $(d).change(function() {                                            
+                s.update(this.value);                                           
+            }); 
         </script>
     </body>
 

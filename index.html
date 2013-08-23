@@ -9,7 +9,19 @@
         <input id="data" type="range" min="-1" max="101" value="0" step="1">
         <button id="stopbg">Stop Background</button>
         <script>
-            var sn = new Sound(),
+            var sn = new Sound();
+            var goog = new Signal();
+            goog.setRange(869,871);
+            window.setInterval(function() {
+                $.getJSON('http://query.yahooapis.com/v1/public/yql?q='+encodeURIComponent('select * from yahoo.finance.quotes where symbol in ("GOOG")')+'&env='+encodeURIComponent('http://datatables.org/alltables.env&format=json&jsoncallback='), function(resp) {
+                    var price = resp.query.results.quote.Ask
+                    goog.update(price);
+
+                });
+            }, 2000);
+        
+            goog.register($.proxy(sn.setAdvisoryLevel, sn));
+
                 p = document.getElementById('go'),
                 e = document.getElementById('stop'),
                 sb = document.getElementById('stopbg');
@@ -26,15 +38,6 @@
             sn.playFile("wn.wav");
 
             var data = new DataLoader('Philadelphia,PA');
-        </script>
-        <script>
-            var s = new Signal();                                               
-            s.setRange(0,100);                                                  
-            var d = document.getElementById('data');                            
-            s.register($.proxy(sn.setAdvisoryLevel,sn));                 
-            $(d).change(function() {                                            
-                s.update(this.value);                                           
-            }); 
         </script>
     </body>
 

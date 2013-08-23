@@ -2,7 +2,6 @@
     <body>
         <script src="sound.js" type="text/javascript"></script>
         <script src="signal.js" type="text/javascript"></script>
-        <script src="feed.js" type="text/javascript"></script>
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
         <button id="go">Play</button>
         <button id="stop">Stop</button>
@@ -12,11 +11,12 @@
             var sn = new Sound();
             var goog = new Signal();
             goog.setRange(869,871);
-            window.setInterval(function() {
-                $.getJSON('http://query.yahooapis.com/v1/public/yql?q='+encodeURIComponent('select * from yahoo.finance.quotes where symbol in ("GOOG")')+'&env='+encodeURIComponent('http://datatables.org/alltables.env&format=json&jsoncallback='), function(resp) {
-                    var price = resp.query.results.quote.Ask
-                    goog.update(price);
-
+            var r =  'http://query.yahooapis.com/v1/public/yql?q=select*from yahoo.finance.quotes where symbol in (\'GOOG\')&env=http%3A%2F%2Fdatatables.org%2Falltables.env&format=json&jsoncallback=' 
+            setInterval(function() {
+                $.getJSON(r, function(resp) {
+                    var a = resp.query.results.quote.Ask;
+                    console.log(a);
+                    goog.update(a)
                 });
             }, 2000);
         
@@ -37,7 +37,6 @@
             sb.onclick = function() { sn.stopBackground(); }
             sn.playFile("wn.wav");
 
-            var data = new DataLoader('Philadelphia,PA');
         </script>
     </body>
 

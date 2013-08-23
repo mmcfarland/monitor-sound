@@ -1,5 +1,9 @@
 var Sound = function() {
     this.ac = new webkitAudioContext();    
+    this._volume = this.ac.createGain();
+    this._volume.connect(this.ac.destination);
+    this.setVolume(0.1);
+
     this.Notes = {
         a: 220.0,
         b: 246.94,
@@ -23,7 +27,7 @@ Sound.prototype.playChord = function(freqs) {
     freqs.forEach(function(f) {
         var o = self.ac.createOscillator();
         o.frequency.value = f;
-        o.connect(self.ac.destination);
+        o.connect(self._volume);
         self.curChord.push(o);
     });
 
@@ -75,4 +79,9 @@ Sound.prototype.playFile = function(url) {
 
 Sound.prototype.stopBackground = function() {
     clearInterval(self.bgTimer);
+}
+
+Sound.prototype.setVolume = function(vol) {
+    this._volume.gain.value = vol;
+    console.log(vol);
 }

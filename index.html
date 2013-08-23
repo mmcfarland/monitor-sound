@@ -6,6 +6,7 @@
         <button id="go">Play</button>
         <button id="stop">Stop</button>
         <input id="data" type="range" min="-1" max="101" value="0" step="1">
+        <input id="vol" type="range" min="0" max="15" value="0" step="1">
         <button id="stopbg">Stop Background</button>
         <script>
             var sn = new Sound(),
@@ -17,6 +18,11 @@
                 //s.play(261.63);
                 sn.playChord([sn.Notes.a, sn.Notes.c, sn.Notes.e]);
             }
+
+            var v = document.getElementById('vol');
+            $(v).change(function() {
+                sn.setVolume(this.value);
+            });
 
             e.onclick = function() {sn.stopChord();}
             sb.onclick = function() { sn.stopBackground(); }

@@ -34,3 +34,37 @@ Sound.prototype.stopChord = function() {
     });
 }
 
+Sound.prototype.playFile = function(url) {
+    var self = this;
+    var buff = 0;
+    var request = new XMLHttpRequest();
+    request.open("GET", url, true);
+    request.responseType = "arraybuffer";
+
+    var play = function(b) {
+        source = self.ac.createBufferSource()
+        source.buffer = b;
+        source.connect(self.ac.destination);
+        source.noteOn(0); 
+    };
+
+    var source = self.ac.createBufferSource();
+    request.onload = function() {
+        // Read the white noise and play it on a loop
+        self.ac.decodeAudioData(request.response,
+            function(buffer) {
+                play(buffer);
+                self.bgTimer = setInterval(function() {
+                    play(buffer);
+                }, 8000);
+            }    
+        );
+
+    }
+
+    request.send();
+}
+
+Sound.prototype.stopBackground = function() {
+    clearInterval(self.bgTimer);
+}

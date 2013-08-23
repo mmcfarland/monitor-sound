@@ -6,18 +6,21 @@
         <button id="go">Play</button>
         <button id="stop">Stop</button>
         <input id="data" type="range" min="-1" max="101" value="0" step="1">
+        <button id="stopbg">Stop Background</button>
         <script>
-            var s = new Sound();
-            var p = document.getElementById('go');
-            var e = document.getElementById('stop');
+            var sn = new Sound(),
+                p = document.getElementById('go'),
+                e = document.getElementById('stop'),
+                sb = document.getElementById('stopbg');
+
             p.onclick = function() {
                 //s.play(261.63);
-                s.playChord([261.63, 400.23, 154]);
+                sn.playChord([261.63, 400.23, 154]);
             }
 
-            e.onclick = function() {
-                s.stopChord();
-            }
+            e.onclick = function() {s.stopChord();}
+            sb.onclick = function() { s.stopBackground(); }
+            sn.playFile("wn.wav");
 
         </script>
         <script>

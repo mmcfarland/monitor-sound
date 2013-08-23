@@ -11,14 +11,20 @@ var Sound = function() {
         c: 261.63,
         d: 293.66,
         e: 329.63,
-        f: 349.23
+        f: 349.23,
+        g: 392.00
     };
 
     this.Chords = {
         a: [this.Notes.a, this.Notes.d, this.Notes.e],
         b: [this.Notes.b, this.Notes.e, this.Notes.f],
-        c: [this.Notes.c, this.Notes.f, this.Notes.g]
+        c: [this.Notes.c, this.Notes.f, this.Notes.g],
+        d: [this.Notes.d, this.Notes.g, this.Notes.a],
+        e: [this.Notes.e, this.Notes.a, this.Notes.b]
     }
+
+    this.allChords = [this.Chords.a, this.Chords.b, this.Chords.c,
+        this.Chords.d, this.Chords.e];
 }
 
 Sound.prototype.play = function(freq) {
@@ -112,9 +118,9 @@ Sound.prototype.setVolume = function(vol) {
 Sound.prototype.setAdvisoryLevel = function(level) {
     // Make the number of tones a factor of the level
     var numTones = parseInt(level*10);
-    this.playChord(this.Chords.a);
-    //this.playChord(this.Chords.b);
-    this.playChord(this.Chords.c);
-  
-    
+    for (var i = 0; i < numTones; i++) {
+        this.playChord(this.allChords[i]);
+    }
+
+    // Make volume a factor of level
 }
